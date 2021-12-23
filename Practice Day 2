@@ -1,0 +1,119 @@
+Q1:  Quick Left Rotation:  https://practice.geeksforgeeks.org/problems/quick-left-rotation3806/1
+
+Approach: Naive Method
+
+public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+        int[] arr = {10,5,30,15};
+        int d = sc.nextInt();
+        for (int w=0;w<d;w++){
+            int temp = arr[0];
+            for(int i=0;i<arr.length-1;i++){
+                arr[i] = arr[i+1];
+            }
+            arr[arr.length-1] = temp;
+        }
+
+
+
+        for(int i=0;i<arr.length;i++){
+            System.out.print(arr[i]+" ");
+
+        }
+
+
+    }
+
+
+Efficient Method (Reversal Algorithm):
+First we check if the value of d is greater than the size of the array, if yes, then we take the modulo of d with the size of the array, and update the value of d with this value.
+In this method, we use an algo, that takes arr, low and high as the input and return the arr that has swapped all the elements. We use this algo three times, first for all the elements less than the index of d, secondly, for all the elements of index greater than and equal to the value of d, and lastly for the whole array.
+
+class Solution
+{
+    static void leftRotate(long arr[], int k,int n)
+    {
+        if(k>n){
+            k = k%n;
+        }
+        swap(arr,0,k-1);
+        swap(arr,k,n-1);
+        swap(arr,0,n-1);
+        
+    }
+    static void swap(long[] arr, int left, int right){
+        while(left<right){
+            long temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+    }
+}
+
+
+Q2: Stock buy and sell :  https://practice.geeksforgeeks.org/problems/stock-buy-and-sell-1587115621/1#
+
+Approach: We start from the 0th element and we keep moving till the stock price is increasing and when we get to a point where the stock gets decreased then we subtract the previous value of i, with the element which was minimum before. After that, we update the minimum price with the current value of i and keep repeating the process.
+Here,              arr[] = {1,5,3,8,12}
+We start from 1 and keep moving till 3, and here as we can see that the value previous to this which is 5 is greater than 3 therefore we subtract 5 from 1 and increment the ans by this difference. And now we have updated the value of min from 1 to current value, which is 3. Now we keep doing this and we see till 12 it is increasing therefore we subtract 12 from 3 and this to the ans.
+
+class Solution{
+    ArrayList<ArrayList<Integer> > stockBuySell(int arr[], int n) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<>();
+        int p = 0;
+        for(int i=0;i<arr.length-1;i++){
+            if(arr[i+1]<arr[i]){
+                int diff = arr[i]-arr[p];
+                if(diff>0){
+                    temp.add(p);
+                    temp.add(i);
+                    ans.add(temp);
+                    p = i+1;
+                    temp = new ArrayList<>();
+                }
+                else{
+                    p = i+1;
+                }
+            }
+        }
+        if(arr[arr.length-1]>arr[p]){
+            if(arr[arr.length-1]>arr[p]){
+                temp.add(p);
+                temp.add(arr.length-1);
+                ans.add(temp);
+                p = arr.length-1+1;
+                temp = new ArrayList<>();
+            }
+        }
+        return ans;
+    }
+}
+
+
+Q3: Majority Element :  https://practice.geeksforgeeks.org/problems/majority-element-1587115620/1#
+
+Approach:  Initialize a hashmap and maintain the count of every element in that array, while doing this if the count of any element is greater than arr.length/2, then return this element, else after the loop finishes, return -1.
+
+class Solution
+{
+    static int majorityElement(int a[], int size)
+    {
+        HashMap<Integer,Integer> arr = new HashMap<>();
+        for(int i=0;i<size;i++){
+            if(arr.get(a[i])!=null){
+                arr.put(a[i],arr.get(a[i])+1);
+            }
+            else{
+                arr.put(a[i],1);
+            }
+            if(arr.get(a[i])>size/2){
+                return a[i];
+            }
+        }
+        return -1;
+    }
+}
+
