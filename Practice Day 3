@@ -1,0 +1,152 @@
+Q1: Division without using multiplication, division and mod operator :  https://practice.geeksforgeeks.org/problems/division-without-using-multiplication-division-and-mod-operator/0/#
+
+Approach1: Naive Approach
+Keep subtracting dividend with divisor until the dividend becomes less than divisor. The number of times it will take to do this will be the final answer.
+
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+        int si = 0;
+        if (n<0 || m<0){
+            si = 1;
+        }
+        n = Math.abs(n);
+        m = Math.abs(m);
+
+        int count = 0;
+        while(n>m){
+            n = n-m;
+            count += 1;
+
+        }
+        if (si==1){
+            System.out.println(-count);
+        }
+        else{
+            System.out.println(count);
+        }
+
+    }
+Approach 2: Efficient Method
+We first check if the divisor can be subtracted from the dividend, if yes then we double the divisor and then again check whether the divisor can be subtracted from the dividend, we keep doing this until it becomes false and the last doubled value of the divisor is subtracted from the dividend. Now after subtraction, we get a new dividend and we do the same for it from the start and we keep doing this until the dividend becomes less than the divisor. While doing this we keep on adding the count value which is equal to the number of times it was doubled for every new dividend.
+
+For eg:
+dividend : 10         Divisor: 3    Count: 0
+Since 10 can be subtracted from 3, therefore we double the value of the divisor; 3*2 = 6
+now, 10 is still subtracted from 6, therefore we again double it: 3*2*2 = 12, since the divisor is greater than the dividend therefore we take the previous value of divisor, which is 6. And we subtract it from dividend and we also update the value of count by the value divisor is last multiplied.
+Dividend = 10-3*2 = 4      count = count + 2 = 0+2 = 2
+Now we again start the same things for this new dividend.
+Since 4 is greater than 3 therefore we multiply it by 2; 3*2 = 6
+Now since 6 is greater than 4 therefore we return to the previous value of divisor, which is 3 and we subtract divisor from dividend to make a new dividend.
+Dividend = 4-3*2^0= 4-3*1 = 1     count  = count + 1 = 2+1 = 3
+Now the value of dividend is less than divisor therefore we stop it here and the value of count is our final answer.
+
+
+
+class Solution
+{
+    public static long divide(long di, long d)
+    {
+        int m=0;
+        if (d<0 || di<0){
+            m=1;
+        }
+        if (d<0 && di<0){
+            m=0;
+        }
+
+        di = Math.abs(di);
+        d = Math.abs(d);
+        long count = 0;
+
+        //Remember that a<<b means a*(2^b)
+
+        while(di-d>=0){
+            long x = 0;
+            while((di-(d<<x))>=0){
+                x +=1;
+            }
+            di = di-(d<<(x-1));
+            count += 1<<(x-1);
+
+        }
+        if (m==1){
+            count = count-1;
+            count = ~count;
+            
+        }
+        return count;
+
+
+    }
+}
+
+
+Q2: Calculate square of a number without using *, / and pow()
+
+Approach:
+For a given number `num` we get square of it by multiplying number as `num * num`. 
+Now write one of `num` in square `num * num` in terms of power of `2`. Check below examples.
+
+Eg: num = 10, square(num) = 10 * 10 
+                          = 10 * (8 + 2) = (10 * 8) + (10 * 2)
+    num = 15, square(num) = 15 * 15 
+                          = 15 * (8 + 4 + 2 + 1) = (15 * 8) + (15 * 4) + (15 * 2) + (15 * 1)
+
+Multiplication with power of 2's can be done by left shift bitwise operator.
+Now to go this approach what we have to do is:
+First find the Most significant set bit of that number i.e., leftmost set bit from right. This can be done by (in DSA Notes copy):
+We divide the log of that number with the log of base 2 and then add 1 to it. This will give the position of the most significant set bit.
+After that, what we have done in Q7, will do the same here also, we will run a loop from 1 to the most significant bit position found above and in this we will check if the bit at that position is set or not and we have done this in Q7 also, if the bit is set at that position then we will store that position value in an array. After this, we will multiply the number with 2^(position value stored in that array) everytime and keep adding them, after this we will get our final result. Wherever we have to multiply with 2^x with a number y, there we will do y<<x.
+
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int x = sc.nextInt();
+
+	//To find the most significant set bit or leftmost bit from right, we do this
+        int right = ((int)(Math.log(x)/Math.log(2)))+1;
+
+        ArrayList<Integer> pos = new ArrayList<Integer>();
+        int count = 0;
+        for (int i=1;i<=right;i++){
+            if ((x&(1<<(i-1)))>0){
+                count += (x<<(i-1));
+            }
+        }
+        System.out.println(count);
+
+    }
+
+
+Q3:  Maximum Product Subarray :  https://practice.geeksforgeeks.org/problems/maximum-product-subarray3604/1
+Approach:
+https://www.youtube.com/watch?v=x7YW7MAvMiY
+
+
+class Solution {
+    long maxProduct(int[] arr, int n) {        
+        long max = arr[0];
+        long min = arr[0];
+        long prod = arr[0];
+        for(int i=1;i<n;i++){
+            if(arr[i]<0){
+                long temp = min;
+                min = max;
+                max = temp;
+            }
+            max = Math.max(arr[i],max*arr[i]);
+            min = Math.min(arr[i],min*arr[i]);
+            
+            if(max>prod){
+                prod = max;
+            }
+            
+        }
+        return prod;
+        
+    }
+}
+
