@@ -1,0 +1,142 @@
+Q1. Given an unsorted array of non-negative integers. Find if there is a subarray with given sum.
+For eg:  i/o: arr[] = {1,4,20,3,10,5}     sum=33
+        o/p:  Yes     as the subarray {20,3,10} has this sum.
+
+
+Naive Approach: Start a loop from the first element and then again start a loop which computes sum of every subarray for every element and check whether the sum of every sum is equal to the value of sum, if true then print Yes or else No. This will take O(n^2) TC.
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] arr = {2,4};
+        int k = sc.nextInt();
+        boolean y = true;
+        for (int i=0;i<arr.length;i++){
+            int sum=0;
+            for (int j=i;j<arr.length-1;j++){
+                sum +=arr[j];
+                if (sum==k){
+                    System.out.println("Yes");
+                    y=false;
+                    break;
+                }
+            }
+        }
+        if(y==true){
+            System.out.println("No");
+        }
+    }
+
+
+
+Efficient approach:
+We start from first element of the array and keep on adding the next element to it and during we keep checking if the sum is equal to sum or not, if true then print Yes and break, but if the sum has exceeded the value of target sum, then we start subtracting the value from the first element till the situation comes when the sum value is equal to target sum or less then it, if this happens till the range of elements the print Yes, or else No.
+
+
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] arr = {2,4};
+        int k = sc.nextInt();
+        int sum=0;
+        int start=0;
+        boolean check=true;
+        for (int i=0;i<arr.length;i++){
+            if(sum<k){
+                sum = sum+arr[i];
+            }
+
+            if(sum==k){
+                System.out.println("Yes");
+                check = false;
+                break;
+            }
+            else if(sum>k){
+                sum=sum-arr[start];
+                start++;
+                if(start>arr.length-1){
+                    check = true;
+                    break;
+                }
+                i--;
+            }
+        }
+        if(check==true){
+            System.out.println("No");
+        }
+    }
+
+Q2. Prefix Sum Technique:
+Given an array, we have to find the sum of elements for a given range.
+For eg,  arr[] = {2,8,3,9,6,5,4}    getsum(0,2)
+o/p:  13
+
+Naive Approach:
+Start with the left range element and keep on adding the sum till the right range element.
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] arr = {2,8,3,9,6,5,4};
+        System.out.println(getsum(1,4,arr));
+    }
+
+    static int getsum(int l, int r, int[] arr){
+        int sum = 0;
+        for (int i=l;i<=r;i++){
+            sum+=arr[i];
+        }
+        return sum;
+    }
+
+
+This will take O(n) time to compute, and for a very large value of n, this method is not useful.
+
+Efficient Approach:
+In this the method getsum() takes only O(1) time, but before that we do some pre-processing in the array, which takes O(n) time and we are concerned with the getsum() method.
+The pre-processing that we do with the array is, we keep adding the elements from starting for each index and when we are asked for a range which has l and r, we compute the sum by:
+Sum = getsum(r)-getsum(l-1);
+For index 0, we just store the value till getsum(r).
+
+
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] arr = {2,8,3,9,6,5,4};
+        for (int i=1;i<arr.length;i++){
+            arr[i] = arr[i]+arr[i-1];
+        }
+        System.out.println(getsum(2,6,arr));
+
+    }
+
+    static int getsum(int l, int r, int[] arr){
+        if(l!=0){
+            return arr[r]-arr[l-1];
+        }
+        else{
+            return arr[r];
+        }
+    }
+
+
+Q3. https://practice.geeksforgeeks.org/problems/common-elements1132/1
+
+Approach:
+Take any array, now start iterating in this array, for each element check if it exists in both remaining arrays or not by using BinarySearch. If yes, then check if it already exists in the result arraylist or not by using binary search of Collections, if not then add this element in the result arraylist, and keep doing till the loop ends. And the result Arraylist will be the final answer.
+
+
+
+class Solution
+{
+    static ArrayList<Integer> commonElements(int arr1[], int arr2[], int arr3[], int n1, int n2, int n3) 
+    {
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(int i=0;i<arr1.length;i++){
+            if(Arrays.binarySearch(arr2,arr1[i])>-1 && Arrays.binarySearch(arr3,arr1[i])>-1){
+                if(Collections.binarySearch(ans,arr1[i])<0){
+                    ans.add(arr1[i]);
+                }
+            }
+        }
+        return ans;
+    }
+    
+}
