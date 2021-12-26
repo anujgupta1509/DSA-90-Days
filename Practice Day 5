@@ -1,0 +1,154 @@
+Q1: Sum of digits using recursion.
+Given a number, find the sum of its digits using recursion.
+
+Approach:
+With recursion we do it by adding the last digit of the number with the remaining digits. Last digit of any number can be found with doing modulus of it with 10, and the remaining number can be found with dividing the number with 10, this will go till the number becomes 0 and it will return 0, and this will become the base case.
+
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class practice{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(sum(253));
+
+    }
+    static int sum(int n){
+        if(n==0){
+            return 0;
+        }
+        return (n%10)+sum(n/10);
+    }
+}
+
+Q2: Josephus Problem
+
+Code:
+
+import java.util.Scanner;
+
+public class practice{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(jos(5,3));
+
+
+    }
+    static int jos(int n, int k){
+        if(n==1){
+            return 0;
+        }
+        else{
+            return ((jos(n-1,k)+k)%n);
+        }
+    }
+}
+
+
+Code of Extended Problem:
+
+static int newAns(int n, int k){
+        return jos(n,k)+1;
+    }
+
+
+
+Q3: Diameter of a Binary tree:
+We have to find the longest chain of nodes in a tree.
+
+Approach 1: Naive Approach
+
+class Node{
+    int key;
+    Node left;
+    Node right;
+    Node(int k){
+        key = k;
+    }
+}
+
+public class prac{
+    public static void main(String[] args) {
+        Node root = new Node(10);
+        root.left = new Node (20);
+        root.right = new Node(30);
+        root.left.left = new Node(30);
+        root.left.left.left = new Node(40);
+        root.left.left.right = new Node(50);
+        root.left.left.left.left = new Node(60);
+        root.left.right = new Node(80);
+        root.left.right.right = new Node(90);
+        root.left.right.right.right = new Node(18);
+        System.out.println(dia(root));
+    }
+
+    static int ht(Node root){
+        if(root!=null){
+            return 1+Math.max(ht(root.left),ht(root.right));
+        }
+        return 0;
+    }
+
+    static int dia(Node root){
+        if(root!=null){
+            int left = ht(root.left);
+            int right = ht(root.right);
+            int present = 1+left+right;
+            int leftTree = dia(root.left);
+            int rightTree = dia(root.right);
+            return Math.max(present,Math.max(leftTree,rightTree));
+        }
+        return 0;
+    }
+
+}
+
+
+TC: O(n^2)
+
+
+Approach 2: Effcient
+
+class Node{
+    int key;
+    Node left;
+    Node right;
+    Node(int k){
+        key = k;
+    }
+}
+
+public class prac{
+    static int ans = 0;
+    public static void main(String[] args) {
+        Node root = new Node(10);
+        root.left = new Node (20);
+        root.right = new Node(30);
+        root.left.left = new Node(30);
+        root.left.left.left = new Node(40);
+        root.left.left.right = new Node(50);
+        root.left.left.left.left = new Node(60);
+        root.left.right = new Node(80);
+        root.left.right.right = new Node(90);
+        root.left.right.right.right = new Node(18);
+        ht(root);
+        System.out.println(ans);
+    }
+
+    static int ht(Node root){
+        if(root!=null){
+            int left = ht(root.left);
+            int right = ht(root.right);
+            int height = 1+Math.max(left,right);
+            int check = 1+left+right;
+            if(ans<check){
+                ans = check;
+            }
+            return height;
+        }
+        return 0;
+    }
+}
+
+T C : O(n)   and Auxiliary Space:  O(h)
