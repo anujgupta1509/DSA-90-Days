@@ -1,0 +1,86 @@
+Q1: https://www.codechef.com/CDRV21C/problems/FRGAME
+Ans1:  https://www.codechef.com/viewsolution/55600458
+
+Q2: https://www.codechef.com/CDRV21C/problems/CHEFFAV
+Ans2: https://www.codechef.com/viewsolution/55604375
+
+Q3:  https://www.codechef.com/CDRV21C/problems/KLXOR
+Ans 3: https://www.codechef.com/viewsolution/55637415
+
+Q4: https://www.codechef.com/CDRV21C/problems/MXFACS
+Ans 4: 
+
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+    public static void main (String[] args) throws java.lang.Exception
+    {
+        // your code goes here
+        try{
+            Scanner sc = new Scanner(System.in);
+            int t = sc.nextInt();
+            for(int h=0;h<t;h++){
+                int n = sc.nextInt();
+                int max = 0;
+                int ans = 0;
+                for(int i=2;i<=n/2;i++){
+                    if(n%i==0){
+                        int ch = div(n/i);
+                        if(max<ch){
+                            max = ch;
+                            ans = i;
+                        }
+                    }
+                }
+                if(ans==0){
+                    System.out.println(n);
+                }
+                else{
+                    System.out.println(ans);
+                }
+            }
+        }
+        catch(Exception e){
+            return;
+        }
+    }
+
+    static int div(int n)
+    {
+        // sieve method for prime calculation
+        boolean hash[] = new boolean[n + 1];
+        Arrays.fill(hash, true);
+        for (int p = 2; p * p < n; p++)
+            if (hash[p] == true)
+                for (int i = p * 2; i < n; i += p)
+                    hash[i] = false;
+
+        int total = 1;
+        for (int p = 2; p <= n; p++)
+        {
+            if (hash[p])
+            {
+                int count = 0;
+                if (n % p == 0)
+                {
+                    while (n % p == 0)
+                    {
+                        n = n / p;
+                        count++;
+                    }
+                    total = total * (count + 1);
+                }
+            }
+        }
+        return total;
+    }
+
+
+
+}
